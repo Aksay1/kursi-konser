@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Payment - Concert Promotion</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Concert Promotion Payment Page" name="description">
+    
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .payment-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .payment-title {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="payment-container">
+        <h2 class="payment-title">Payment for Concert Promotion</h2>
+        
+        <!-- Display Selected Package -->
+        <div class="form-group">
+            <label>Selected Package:</label>
+            <input type="text" id="selected-package" class="form-control" readonly>
+        </div>
+
+        <!-- Payment Form -->
+        <form id="payment-form">
+            <div class="form-group">
+                <label for="cardholder-name">Cardholder's Name:</label>
+                <input type="text" class="form-control" id="cardholder-name" required>
+            </div>
+            <div class="form-group">
+                <label for="card-number">Card Number:</label>
+                <input type="text" class="form-control" id="card-number" required>
+            </div>
+            <div class="form-group">
+                <label for="expiry-date">Expiry Date:</label>
+                <input type="text" class="form-control" id="expiry-date" placeholder="MM/YY" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV:</label>
+                <input type="text" class="form-control" id="cvv" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block font-weight-bold py-3">Complete Payment</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Get the selected package from the URL
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedPackage = urlParams.get('package');
+            document.getElementById('selected-package').value = selectedPackage || 'No package selected';
+        };
+        
+        // Handle form submission
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Payment successful for ' + document.getElementById('selected-package').value);
+            // Here you can redirect to a confirmation page or process the payment further
+        });
+    </script>
+</body>
+
+</html>
