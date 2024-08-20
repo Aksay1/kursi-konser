@@ -18,7 +18,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #343a40;
+            background-color: #D19C97;
             padding-top: 20px;
         }
 
@@ -31,7 +31,7 @@
         }
 
         .sidebar a:hover {
-            background-color: #575d63;
+            background-color: #bb8c88;
         }
 
         .content {
@@ -40,8 +40,8 @@
         }
 
         .navbar {
-            margin-left: 250px;
-            background-color: #343a40;
+            margin-left: 300px;
+            background-color: #D19C97;
             color: white;
         }
 
@@ -117,7 +117,7 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Role</th>
+                                    <th>Password User</th> <!-- Changed from Role -->
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -179,8 +179,8 @@
                             <input type="email" class="form-control" id="editEmail" required>
                         </div>
                         <div class="form-group">
-                            <label for="editRole">Role</label>
-                            <input type="text" class="form-control" id="editRole" required>
+                            <label for="editPassword">Password User</label>
+                            <input type="text" class="form-control" id="editPassword" required> <!-- Changed from Role -->
                         </div>
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </form>
@@ -219,8 +219,8 @@
             // Fetch user data from API and populate the user table
             // Example data (replace with actual API data)
             const users = [
-                { id: 1, name: "John Doe", email: "john.doe@example.com", role: "User" },
-                { id: 2, name: "Jane Smith", email: "jane.smith@example.com", role: "Admin" }
+                { id: 1, name: "John Doe", email: "john.doe@example.com", password: "123456" }, // Changed from Role to Password
+                { id: 2, name: "Jane Smith", email: "jane.smith@example.com", password: "abcdef" } // Changed from Role to Password
             ];
 
             let userRows = '';
@@ -230,7 +230,7 @@
                         <td>${user.id}</td>
                         <td>${user.name}</td>
                         <td>${user.email}</td>
-                        <td>${user.role}</td>
+                        <td>${user.password}</td> <!-- Changed from Role to Password -->
                         <td>
                             <button class="btn btn-primary btn-sm btn-action" onclick="editRecord('user', ${user.id})"><i class="fas fa-edit"></i> Edit</button>
                             <button class="btn btn-danger btn-sm btn-action" onclick="deleteRecord(${user.id})"><i class="fas fa-trash"></i> Delete</button>
@@ -280,12 +280,12 @@
                     id: id,
                     name: "John Doe", // Replace with actual data
                     email: "john.doe@example.com", // Replace with actual data
-                    role: "User" // Replace with actual data
+                    password: "123456" // Replace with actual data
                 };
                 document.getElementById('editId').value = user.id;
                 document.getElementById('editName').value = user.name;
                 document.getElementById('editEmail').value = user.email;
-                document.getElementById('editRole').value = user.role;
+                document.getElementById('editPassword').value = user.password; // Changed from Role to Password
             }
             $('#editModal').modal('show');
         }
