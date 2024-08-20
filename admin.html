@@ -61,7 +61,6 @@
     <div class="sidebar">
         <a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         <a href="#users"><i class="fas fa-users"></i> Users</a>
-        <a href="#organizers"><i class="fas fa-user-tie"></i> Event Organizers</a>
         <a href="#payments"><i class="fas fa-dollar-sign"></i> Payments</a>
         <a href="#settings"><i class="fas fa-cogs"></i> Settings</a>
         <a href="#logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -81,7 +80,7 @@
 
             <!-- Stats Cards -->
             <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="col-lg-6 col-md-12 col-sm-12">
                     <div class="card bg-primary text-white">
                         <div class="card-body">
                             <div class="card-body-icon">
@@ -92,25 +91,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
-                            <div class="card-body-icon">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <h5 class="card-title">Jumlah Event Organizer</h5>
-                            <h2 id="organizer-count">2</h2> <!-- Replace with dynamic value -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="col-lg-6 col-md-12 col-sm-12">
                     <div class="card bg-warning text-white">
                         <div class="card-body">
                             <div class="card-body-icon">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
                             <h5 class="card-title">Total Payments</h5>
-                            <h2 id="total-payments">IDR 0</h2> <!-- Replace with dynamic value -->
+                            <h2 id="total-payments">IDR 3,000,000</h2> <!-- Replace with dynamic value -->
                         </div>
                     </div>
                 </div>
@@ -135,31 +123,6 @@
                             </thead>
                             <tbody id="user-list">
                                 <!-- User rows will be dynamically added here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- List Event Organizers -->
-            <div id="organizers" class="card mt-4">
-                <div class="card-header">
-                    <i class="fas fa-user-tie"></i> List Event Organizers
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Events Organized</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="organizer-list">
-                                <!-- Event Organizer rows will be dynamically added here -->
                             </tbody>
                         </table>
                     </div>
@@ -194,7 +157,7 @@
         </div>
     </div>
 
-    <!-- Modal for Editing User/Organizer -->
+    <!-- Modal for Editing User -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -275,41 +238,16 @@
                     </tr>
                 `;
             });
+
             document.getElementById('user-list').innerHTML = userRows;
-        }
-
-        function fetchOrganizers() {
-            // Fetch event organizer data from API and populate the organizer table
-            // Example data (replace with actual API data)
-            const organizers = [
-                { id: 1, name: "Alice Johnson", email: "alice.johnson@example.com", events: 5 },
-                { id: 2, name: "Bob Brown", email: "bob.brown@example.com", events: 3 }
-            ];
-
-            let organizerRows = '';
-            organizers.forEach(organizer => {
-                organizerRows += `
-                    <tr>
-                        <td>${organizer.id}</td>
-                        <td>${organizer.name}</td>
-                        <td>${organizer.email}</td>
-                        <td>${organizer.events}</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm btn-action" onclick="editRecord('organizer', ${organizer.id})"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn btn-danger btn-sm btn-action" onclick="deleteRecord(${organizer.id})"><i class="fas fa-trash"></i> Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            document.getElementById('organizer-list').innerHTML = organizerRows;
         }
 
         function fetchPayments() {
             // Fetch payment data from API and populate the payments table
             // Example data (replace with actual API data)
             const payments = [
-                { id: 1, organizer: "Alice Johnson", event: "Music Fest", amount: "IDR 500,000", date: "2024-08-15" },
-                { id: 2, organizer: "Bob Brown", event: "Food Expo", amount: "IDR 300,000", date: "2024-08-20" }
+                { id: 1, organizerName: "ABC Corp", eventName: "Annual Meeting", amount: "IDR 1,000,000", date: "2023-08-01" },
+                { id: 2, organizerName: "XYZ Ltd", eventName: "Product Launch", amount: "IDR 2,000,000", date: "2023-08-15" }
             ];
 
             let paymentRows = '';
@@ -317,76 +255,54 @@
                 paymentRows += `
                     <tr>
                         <td>${payment.id}</td>
-                        <td>${payment.organizer}</td>
-                        <td>${payment.event}</td>
+                        <td>${payment.organizerName}</td>
+                        <td>${payment.eventName}</td>
                         <td>${payment.amount}</td>
                         <td>${payment.date}</td>
                     </tr>
                 `;
             });
+
             document.getElementById('payments-list').innerHTML = paymentRows;
-
-            // Update total payments
-            const totalPayments = payments.reduce((sum, payment) => sum + parseInt(payment.amount.replace(/[^0-9]/g, '')), 0);
-            document.getElementById('total-payments').innerText = `IDR ${totalPayments.toLocaleString()}`;
         }
 
-        function populateTables() {
+        // Call fetch functions on page load
+        document.addEventListener('DOMContentLoaded', function () {
             fetchUsers();
-            fetchOrganizers();
             fetchPayments();
-        }
+        });
 
+        // Example functions for editing and deleting records
         function editRecord(type, id) {
-            // Fetch the record data and show it in the edit modal
-            // For simplicity, we'll use static data here. Replace with API fetch in real implementation.
+            // Populate modal with existing data and show it
             if (type === 'user') {
-                // Fetch user data (example)
-                const user = { id: id, name: "John Doe", email: "john.doe@example.com", role: "User" };
-                $('#editId').val(user.id);
-                $('#editName').val(user.name);
-                $('#editEmail').val(user.email);
-                $('#editRole').val(user.role);
-            } else if (type === 'organizer') {
-                // Fetch organizer data (example)
-                const organizer = { id: id, name: "Alice Johnson", email: "alice.johnson@example.com" };
-                $('#editId').val(organizer.id);
-                $('#editName').val(organizer.name);
-                $('#editEmail').val(organizer.email);
-                $('#editRole').val(''); // No role for organizers
+                const user = {
+                    id: id,
+                    name: "John Doe", // Replace with actual data
+                    email: "john.doe@example.com", // Replace with actual data
+                    role: "User" // Replace with actual data
+                };
+                document.getElementById('editId').value = user.id;
+                document.getElementById('editName').value = user.name;
+                document.getElementById('editEmail').value = user.email;
+                document.getElementById('editRole').value = user.role;
             }
             $('#editModal').modal('show');
         }
 
         function deleteRecord(id) {
-            $('#confirmDelete').data('id', id);
+            // Show delete confirmation modal
             $('#deleteModal').modal('show');
+
+            // Set up the delete action
+            document.getElementById('confirmDelete').onclick = function () {
+                // Perform deletion (Replace with actual API call)
+                console.log("Deleted record with ID:", id);
+                $('#deleteModal').modal('hide');
+            };
         }
-
-        $('#editForm').submit(function (event) {
-            event.preventDefault();
-            const id = $('#editId').val();
-            const name = $('#editName').val();
-            const email = $('#editEmail').val();
-            const role = $('#editRole').val();
-            // Update the record via API
-            $('#editModal').modal('hide');
-            // Refresh the tables after update
-            populateTables();
-        });
-
-        $('#confirmDelete').click(function () {
-            const id = $(this).data('id');
-            // Delete the record via API
-            $('#deleteModal').modal('hide');
-            // Refresh the tables after deletion
-            populateTables();
-        });
-
-        $(document).ready(function () {
-            populateTables();
-        });
     </script>
+
 </body>
 
 </html>
