@@ -163,7 +163,7 @@ h6 span{
   letter-spacing: 0.5px;
   outline: none;
   color: #c4c3ca;
-  background-color: #8e8e8e;
+  background-color: #ffffff;
   border: none;
   -webkit-transition: all 200ms linear;
   transition: all 200ms linear;
@@ -263,7 +263,7 @@ h6 span{
 }
 .btn:active,
 .btn:focus{  
-  background-color: #102770;
+  background-color: #d1bf85;
   color: #ffeba7;
   box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
 }
