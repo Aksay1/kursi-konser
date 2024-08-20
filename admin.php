@@ -1,6 +1,32 @@
+<?php
+include 'config.php';
+
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+    $result = mysqli_query($conn, "SELECT * FROM login_system WHERE id = $id");
+    $user = mysqli_fetch_assoc($result);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = intval($_POST['id']);
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    
+    $sql = "UPDATE login_system SET Name='$username', Email='$email', Password='$password' WHERE id=$id";
+    if (mysqli_query($conn, $sql)) {
+        header('Location: admin.php');
+        exit();
+    } else {
+        echo "<div class='alert alert-danger' role='alert'>Error updating record: " . mysqli_error($conn) . "</div>";
+    }
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +37,6 @@
         body {
             font-family: 'Poppins', sans-serif;
         }
-
         .sidebar {
             height: 100vh;
             width: 250px;
@@ -21,7 +46,6 @@
             background-color: #D19C97;
             padding-top: 20px;
         }
-
         .sidebar a {
             padding: 15px;
             text-decoration: none;
@@ -29,32 +53,26 @@
             color: white;
             display: block;
         }
-
         .sidebar a:hover {
             background-color: #bb8c88;
         }
-
         .content {
             margin-left: 250px;
             padding: 20px;
         }
-
         .navbar {
-            margin-left: 300px;
+            margin-left: 250px;
             background-color: #D19C97;
             color: white;
         }
-
         .card {
             margin-bottom: 20px;
         }
-
         .btn-action {
             margin: 0 5px;
         }
     </style>
 </head>
-
 <body>
 
     <!-- Sidebar -->
@@ -68,10 +86,7 @@
 
     <!-- Content -->
     <div class="content">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <a class="navbar-brand" href="#">Admin Dashboard</a>
-        </nav>
+       
 
         <!-- Main Content -->
         <div class="container-fluid mt-4">
@@ -87,7 +102,7 @@
                                 <i class="fas fa-users"></i>
                             </div>
                             <h5 class="card-title">Jumlah User</h5>
-                            <h2 id="user-count">2</h2> <!-- Replace with dynamic value -->
+                            <h2 id="user-count">2</h2> <!-- Gantilah dengan nilai dinamis -->
                         </div>
                     </div>
                 </div>
@@ -98,7 +113,7 @@
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
                             <h5 class="card-title">Total Payments</h5>
-                            <h2 id="total-payments">IDR 3,000,000</h2> <!-- Replace with dynamic value -->
+                            <h2 id="total-payments">IDR 3,000,000</h2> <!-- Gantilah dengan nilai dinamis -->
                         </div>
                     </div>
                 </div>
@@ -117,12 +132,12 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Password User</th> <!-- Changed from Role -->
+                                    <th>Password User</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="user-list">
-                                <!-- User rows will be dynamically added here -->
+                                <!-- User rows akan ditambahkan secara dinamis di sini -->
                             </tbody>
                         </table>
                     </div>
@@ -147,7 +162,7 @@
                                 </tr>
                             </thead>
                             <tbody id="payments-list">
-                                <!-- Payment rows will be dynamically added here -->
+                                <!-- Payment rows akan ditambahkan secara dinamis di sini -->
                             </tbody>
                         </table>
                     </div>
@@ -168,19 +183,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="editForm">
-                        <input type="hidden" id="editId">
+                    <form id="editForm" method="POST" action=""> 
+                        <input type="hidden" id="editId" name="id" value="<?php echo $user['id']; ?>">
                         <div class="form-group">
                             <label for="editName">Name</label>
-                            <input type="text" class="form-control" id="editName" required>
+                            <input type="text" class="form-control" id="editName" name="username" value="<?php echo $user['username']; ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="editEmail">Email</label>
-                            <input type="email" class="form-control" id="editEmail" required>
+                            <input type="email" class="form-control" id="editEmail" name="email" value="<?php echo $user['email']; ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="editPassword">Password User</label>
-                            <input type="text" class="form-control" id="editPassword" required> <!-- Changed from Role -->
+                            <input type="text" class="form-control" id="editPassword" name="password" value="<?php echo $user['password']; ?>" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </form>
@@ -194,13 +209,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this record?</p>
+                    <p>Are you sure you want to delete this user?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -210,99 +225,51 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // Example data fetching functions (Replace with actual API calls)
-        function fetchUsers() {
-            // Fetch user data from API and populate the user table
-            // Example data (replace with actual API data)
-            const users = [
-                { id: 1, name: "John Doe", email: "john.doe@example.com", password: "123456" }, // Changed from Role to Password
-                { id: 2, name: "Jane Smith", email: "jane.smith@example.com", password: "abcdef" } // Changed from Role to Password
-            ];
+        // Simulate dynamic population of user data
+        const users = [
+            { id: 1, name: 'Asep Suherman', email: 'asep@example.com', password: 'password123' },
+            { id: 2, name: 'Siti Maryam', email: 'siti@example.com', password: 'password456' }
+        ];
 
-            let userRows = '';
-            users.forEach(user => {
-                userRows += `
-                    <tr>
-                        <td>${user.id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td>${user.password}</td> <!-- Changed from Role to Password -->
-                        <td>
-                            <button class="btn btn-primary btn-sm btn-action" onclick="editRecord('user', ${user.id})"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn btn-danger btn-sm btn-action" onclick="deleteRecord(${user.id})"><i class="fas fa-trash"></i> Delete</button>
-                        </td>
-                    </tr>
-                `;
-            });
+        const userList = document.getElementById('user-list');
 
-            document.getElementById('user-list').innerHTML = userRows;
-        }
-
-        function fetchPayments() {
-            // Fetch payment data from API and populate the payments table
-            // Example data (replace with actual API data)
-            const payments = [
-                { id: 1, organizerName: "ABC Corp", eventName: "Annual Meeting", amount: "IDR 1,000,000", date: "2023-08-01" },
-                { id: 2, organizerName: "XYZ Ltd", eventName: "Product Launch", amount: "IDR 2,000,000", date: "2023-08-15" }
-            ];
-
-            let paymentRows = '';
-            payments.forEach(payment => {
-                paymentRows += `
-                    <tr>
-                        <td>${payment.id}</td>
-                        <td>${payment.organizerName}</td>
-                        <td>${payment.eventName}</td>
-                        <td>${payment.amount}</td>
-                        <td>${payment.date}</td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('payments-list').innerHTML = paymentRows;
-        }
-
-        // Call fetch functions on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            fetchUsers();
-            fetchPayments();
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>${user.password}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm btn-action" onclick="editUser(${user.id})"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm btn-action" onclick="deleteUser(${user.id})"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            `;
+            userList.appendChild(row);
         });
+        function editUser(id) {
+    const user = users.find(u => u.id === id);
+    if (user) {
+        document.getElementById('editId').value = user.id;
+        document.getElementById('editName').value = user.name;
+        document.getElementById('editEmail').value = user.email;
+        document.getElementById('editPassword').value = user.password;
+        $('#editModal').modal('show');
+    }
+}
 
-        // Example functions for editing and deleting records
-        function editRecord(type, id) {
-            // Populate modal with existing data and show it
-            if (type === 'user') {
-                const user = {
-                    id: id,
-                    name: "John Doe", // Replace with actual data
-                    email: "john.doe@example.com", // Replace with actual data
-                    password: "123456" // Replace with actual data
-                };
-                document.getElementById('editId').value = user.id;
-                document.getElementById('editName').value = user.name;
-                document.getElementById('editEmail').value = user.email;
-                document.getElementById('editPassword').value = user.password; // Changed from Role to Password
-            }
-            $('#editModal').modal('show');
-        }
+function deleteUser(id) {
+    $('#deleteModal').modal('show');
+    document.getElementById('confirmDelete').onclick = function() {
+        window.location.href = `delete.php id=${id}`;
+    };
+}
 
-        function deleteRecord(id) {
-            // Show delete confirmation modal
-            $('#deleteModal').modal('show');
-
-            // Set up the delete action
-            document.getElementById('confirmDelete').onclick = function () {
-                // Perform deletion (Replace with actual API call)
-                console.log("Deleted record with ID:", id);
-                $('#deleteModal').modal('hide');
-            };
-        }
     </script>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-
 </html>
