@@ -71,6 +71,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .btn-action {
             margin: 0 5px;
         }
+        .event-poster {
+            width: 100px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -80,15 +84,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         <a href="#users"><i class="fas fa-users"></i> Users</a>
         <a href="#payments"><i class="fas fa-dollar-sign"></i> Payments</a>
+        <a href="#events"><i class="fas fa-calendar-alt"></i> Events</a> <!-- Added Events section -->
         <a href="#settings"><i class="fas fa-cogs"></i> Settings</a>
         <a href="#logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <!-- Content -->
     <div class="content">
-       
-
-        <!-- Main Content -->
         <div class="container-fluid mt-4">
             <h2>Dashboard</h2>
             <p>Welcome to the admin panel.</p>
@@ -137,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </tr>
                             </thead>
                             <tbody id="user-list">
-                                <!-- User rows akan ditambahkan secara dinamis di sini -->
+                                <!-- User rows will be dynamically added here -->
                             </tbody>
                         </table>
                     </div>
@@ -162,7 +164,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </tr>
                             </thead>
                             <tbody id="payments-list">
-                                <!-- Payment rows akan ditambahkan secara dinamis di sini -->
+                                <!-- Payment rows will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Concert Events Table -->
+            <div id="events" class="card mt-4">
+                <div class="card-header">
+                    <i class="fas fa-calendar-alt"></i> Concert Events
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Poster</th>
+                                    <th>Event Name</th>
+                                    <th>Tickets Available</th>
+                                    <th>Ticket Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="event-list">
+                                <!-- Event rows will be dynamically added here -->
                             </tbody>
                         </table>
                     </div>
@@ -248,23 +276,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             `;
             userList.appendChild(row);
         });
-        function editUser(id) {
-    const user = users.find(u => u.id === id);
-    if (user) {
-        document.getElementById('editId').value = user.id;
-        document.getElementById('editName').value = user.name;
-        document.getElementById('editEmail').value = user.email;
-        document.getElementById('editPassword').value = user.password;
-        $('#editModal').modal('show');
-    }
-}
 
-function deleteUser(id) {
-    $('#deleteModal').modal('show');
-    document.getElementById('confirmDelete').onclick = function() {
-        window.location.href = `delete.php id=${id}`;
-    };
-}
+        // Simulate dynamic population of concert event data
+        const events = [
+            { id: 1, poster: 'poster1.jpg', name: 'Concert A', tickets: 50, price: 'IDR 500,000' },
+            { id: 2, poster: 'poster2.jpg', name: 'Concert B', tickets: 30, price: 'IDR 300,000' }
+        ];
+
+        const eventList = document.getElementById('event-list');
+
+        events.forEach(event => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${event.id}</td>
+                <td><img src="${event.poster}" class="event-poster" alt="Poster"></td>
+                <td>${event.name}</td>
+                <td>${event.tickets}</td>
+                <td>${event.price}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm btn-action" onclick="editEvent(${event.id})"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm btn-action" onclick="deleteEvent(${event.id})"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            `;
+            eventList.appendChild(row);
+        });
+
+        function editUser(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                document.getElementById('editId').value = user.id;
+                document.getElementById('editName').value = user.name;
+                document.getElementById('editEmail').value = user.email;
+                document.getElementById('editPassword').value = user.password;
+                $('#editModal').modal('show');
+            }
+        }
+
+        function deleteUser(id) {
+            $('#deleteModal').modal('show');
+            document.getElementById('confirmDelete').onclick = function() {
+                window.location.href = `delete.php id=${id}`;
+            };
+        }
+
+        function editEvent(id) {
+            const event = events.find(e => e.id === id);
+            if (event) {
+                // Populate the form with event details (similar to editUser function)
+                $('#editModal').modal('show');
+            }
+        }
+
+        function deleteEvent(id) {
+            $('#deleteModal').modal('show');
+            document.getElementById('confirmDelete').onclick = function() {
+                window.location.href = `delete_event.php?id=${id}`;
+            };
+        }
 
     </script>
 
@@ -273,3 +341,4 @@ function deleteUser(id) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
