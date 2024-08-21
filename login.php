@@ -25,7 +25,7 @@
 							<div class="card-3d-wrapper">
 								<div class="card-front">
 									<div class="center-wrap">
-										<div class="section text-center">
+										<div class="section text-center"> <form action="proses_login.php" method="post">
 											<h4 class="mb-4 pb-3">Sign In</h4>
 											<div class="form-group">
 												<input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
@@ -35,28 +35,35 @@
 												<input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
-											<a href="#" class="btn mt-4">submit</a>
+											<input type="submit" class="btn mt-4" name="kirim" value="submit">
                             				<p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
-				      					</div>
-			      					</div>
+									 								  
+								 	</div>
+			      				</form> 	
+							</div>
 			      				</div>
 								<div class="card-back">
 									<div class="center-wrap">
 										<div class="section text-center">
+										<form action="proses_register.php" method="post">
 											<h4 class="mb-4 pb-3">Sign Up</h4>
-											<div class="form-group">
-												<input type="text" name="logname" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off">
+											<div class="form-group"> 
+												<input type="text" name="username" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off">
 												<i class="input-icon uil uil-user"></i>
 											</div>	
 											<div class="form-group mt-2">
-												<input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
+												<input type="email" name="email" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
 												<i class="input-icon uil uil-at"></i>
 											</div>	
 											<div class="form-group mt-2">
-												<input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
+												<input type="password" name="password" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
-											<a href="#" class="btn mt-4">submit</a>
+											<div class="form-group mt-2">
+												<input type="text" name="no_hp" class="form-style" placeholder="Number phone" id="logpass" autocomplete="off">
+											
+											</div>
+											<input type="submit" class="btn mt-4" name="kirim" value="submit">
 				      					</div>
 			      					</div>
 			      				</div>
