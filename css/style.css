@@ -3341,11 +3341,15 @@ input[type="button"].btn-block {
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
+  align-items: center;
   width: 100%;
 }
+.input-group > .form-control{
+  position: relative;
+  bottom: 10px;
+  width: 85%;
+}
 
-.input-group > .form-control,
 .input-group > .form-control-plaintext,
 .input-group > .custom-select,
 .input-group > .custom-file {
@@ -6105,6 +6109,7 @@ button.bg-primary:focus {
 
 .bg-secondary {
   background-color: #EDF1FF !important;
+  padding: 15px 0;
 }
 
 a.bg-secondary:hover, a.bg-secondary:focus,
